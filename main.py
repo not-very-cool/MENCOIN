@@ -390,7 +390,7 @@ for i in range(int(q)):
             f.write(str(t2) + "\n")
 						##################################
 						#write to global transaction file#
-            record(username + "mined 1 mencoin!")
+            record(username + " mined 1 mencoin!")
 						#################################
             f.close()
             print("\nMENCOIN REPORT:")
