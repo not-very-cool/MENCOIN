@@ -22,12 +22,6 @@ port = 443
 mode = "peer-to-peer"
 server_status = "down"
 
-####PYTHON DISCORD BOT####
-
-
-
-##########################
-
 global username
 #########PRIVATE KEY GENERATOR##############
 
@@ -377,7 +371,7 @@ for i in range(int(q)):
         # checking condition for string found or not
         if not initial_block.block_hash in readfile:
             # play sound
-            print('\a' * 500)
+            print('\a' ** 500)
             print("-----------------")
             print("MENCOIN found")
             print("you now have " + str(mencoin_total) + " mencoin")
@@ -433,10 +427,10 @@ for i in range(int(q)):
     print()
     #time.sleep(1.5)
     print("------------")
-    print("hashes checked per second is: " + str(1.0/(time.time() - start_time)))
     #real fps counter
 
     print("the hash is: " + initial_block.block_hash)
+    print("hashes checked per second is: " + str(1.0/(time.time() - start_time)))
     print("--------------")
           
 print("\n" * 3)
