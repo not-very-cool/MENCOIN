@@ -1,3 +1,5 @@
-amount: 20, seller: Man123, ID: c718
 amount: 5, seller: 142611, ID: c67e
 amount: 1111111111, seller: yolo1, ID: 0351
+amount: 3, seller: hi, ID: 0a2a
+amount: 3, seller: hi, ID: 9b4d
+amount: exit, seller: 142611, ID: c115

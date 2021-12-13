@@ -76,6 +76,15 @@ block_chain = []
 
 #dir_path = os.path.dirname(os.path.realpath(__file__))
 
+def website():
+  print("pass")
+  print("---")
+  
+
+  
+#you can help in any way
+#also we are trying to make a website i can send you    #are you gonna send it to me on email @OmSilwal          
+
 
 def get_men_coin_in_file():
     # open file in read mode
@@ -125,6 +134,42 @@ def send(num_mencoin, from_who, to_who):
     #end placeholder
     file2.write("\n".join(d[last_mencoin_index:]))
     file2.close()
+    with open("buy_sell_log.txt", "r") as f:
+        debts_raw = f.readlines()
+        debts = []
+        for i in debts_raw:
+            splitted = i.split(" ")
+            debts.append([splitted[0], splitted[2], int(splitted[3])])
+        for i in debts:
+            if order_info["seller:"][:-1] == i[1] and username == i[0]:
+                debt_val = i
+                debt_index = debts.index(i)
+                break
+            elif order_info["seller:"][:-1] == i[0] and username == i[1]:
+                debt_val = i
+                debt_val[2] *= -1
+                debt_index = debts.index(i)
+                break
+        try:
+            debt_val
+            debt_index
+        except:
+            debt_val = [username, from_who, 0]
+            debt_index = None
+    with open("buy_sell_log.txt", "w") as f:
+        for i, v in enumerate(debts_raw):
+            if i != debt_index:
+                f.write(v)
+            else:
+                debt_amt = debt_val[2] + num_mencoin
+                print(debt_amt)
+                print(debt_val[2], num_mencoin)
+                if debt_amt == 0:
+                    pass
+                else:
+                    f.write(f"{username} owes {from_who} {debt_amt} mencoin")
+        if debt_index == None:
+            f.write(f"{username} owes {from_who} {num_mencoin} mencoin")
 
 def record(data):
   with open("block_chain_value.txt", "a") as f:
@@ -202,7 +247,7 @@ else:
     print("not a valid answer")
     exit()
 
-mine_trade_buy_sell = input("mine or trade or buy or sell>  ").lower()
+mine_trade_buy_sell = input("mine, trade, buy or sell>  ").lower()
 if mine_trade_buy_sell == 'mine':
     while True:
       random_nonce_bool = input("random nonce values? y n >> ").lower()
@@ -259,43 +304,6 @@ elif mine_trade_buy_sell == 'buy':
                 f.write(v)
         f.truncate()
     send(int(order_info["amount:"][:-1]), order_info["seller:"][:-1], username)
-    with open("buy_sell_log.txt", "r") as f:
-        debts_raw = f.readlines()
-        debts = []
-        for i in debts_raw:
-            splitted = i.split(" ")
-            debts.append([splitted[0], splitted[2], int(splitted[3])])
-        for i in debts:
-            if order_info["seller:"][:-1] == i[1] and username == i[0]:
-                debt_val = i
-                debt_index = debts.index(i)
-                break
-            elif order_info["seller:"][:-1] == i[0] and username == i[1]:
-                debt_val = i
-                debt_val[2] *= -1
-                debt_index = debts.index(i)
-                break
-        try:
-            debt_val
-            debt_index
-        except:
-            debt_val = [username, order_info["seller:"][:-1], 0]
-            debt_index = None
-    with open("buy_sell_log.txt", "w") as f:
-        for i, v in enumerate(debts_raw):
-            if i != debt_index:
-                f.write(v)
-            else:
-                debt_amt = debt_val[2] + int(order_info["amount:"][:-1])
-                print(debt_amt)
-                print(debt_val[2], int(order_info["amount:"][:-1]))
-                if debt_amt == 0:
-                    pass
-                else:
-                    f.write(f"{username} owes {order_info['seller:'][:-1]} {debt_amt} mencoin")
-        if debt_index == None:
-            debt_amt = int(order_info["amount:"][:-1])
-            f.write(f"{username} owes {debt_val[1]} {debt_amt} mencoin")
 
     record(f"order with id {buy_order} was bought by {username}")
     print("transaction verified")
@@ -421,7 +429,7 @@ for i in range(int(q)):
         # checking condition for string found or not
         if not initial_block.block_hash in readfile:
             # play sound
-            print('\a' * 500)
+            print('\a' * 50000)
             print("-----------------")
             print("MENCOIN found")
             print("you now have " + str(mencoin_total) + " mencoin")
