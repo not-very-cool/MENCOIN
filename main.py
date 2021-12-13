@@ -63,7 +63,7 @@ block_chain = []
 # @2021 javi d funk
 # @2021 ethan lee
 # @2021 Matthew S.
-# @2021 Jiyoon C.
+# @2021 jiyoon chang
 #################
 ####list to string###
 
@@ -79,16 +79,27 @@ block_chain = []
 
 def get_men_coin_in_file():
     # open file in read mode
-    file = open("wallets/" + username + ".txt", 'r')
+    with open("wallets/" + username + ".txt", 'r') as f:
 
-    # store content of the file in a variable
-    text = file.readlines()
-
-    # close file
-    file.close()
+        # store content of the file in a variable
+        text = f.readlines()
 
     # using list comp
-    return len(["" for i in text if len(i) == 65 and i.startswith("0000")])
+    num_mencoin = 0
+    checked_mencoin = []
+    for i in text:
+        if len(i) == 65 and i.startswith("0000"):
+            if i in checked_mencoin:
+                print("how do u have 2 mencoin with the same hash lol")
+                print("fixing your file...")
+                with open("wallets/" + username + ".txt", 'w') as f:
+                    text = list(set(text))
+                    for i in text:
+                        f.write(i)
+                exit()
+            num_mencoin += 1
+        checked_mencoin.append(i)
+    return num_mencoin
 
 def send(num_mencoin, from_who, to_who):
     print("sending mencoin...")
@@ -101,16 +112,19 @@ def send(num_mencoin, from_who, to_who):
             if from_who == username:
                 print("you don't have enough mencoin!")
             else:
-                print(f"{from_who} doesn't have any mencoin!")
+                print(f"{from_who} doesn't have enough mencoin!")
             exit()
         else:
             last_mencoin_index = mencoin_indexes[-num_mencoin]
-        for i in d[0:last_mencoin_index]:
+        for i in d[:last_mencoin_index]:
             f.write(i)
+        print(d[last_mencoin_index:])
         f.truncate()
-    file2.write(d[last_mencoin_index] + "\n")
+    #start placeholder
+    print(list(range(last_mencoin_index, len(d))))
+    #end placeholder
+    file2.write("\n".join(d[last_mencoin_index:]))
     file2.close()
-    exit()
 
 def record(data):
   with open("block_chain_value.txt", "a") as f:
@@ -217,31 +231,72 @@ elif mine_trade_buy_sell == 'trade':
     if public_key_send in readfile:
 
         # placeholder until om makes it better
-        send(1, username, public_key_send)
+        num_send = int(input("how many mencoin would you like to send?>>"))
+        send(num_send, username, public_key_send)
+        record(f"{username} sent 1 mencoin to {public_key_send}")
+    else:
+        print("that account doesn't exist!")
+    exit()
 
-elif mine_trade_buy_sell == 'buy' :
+elif mine_trade_buy_sell == 'buy':
     with open("market.txt", "r+") as f:
         d = f.readlines()
-        print("sell offers:\n" + "\n".join(d))
+        print("sell offers:\n" + "".join(d))
         buy_order = input("which offer would you like to buy? (ENTER ID)>>")
         f.seek(0)
-        order_index = [index for index, val in enumerate(d) if val.split(" ")[-1] == buy_order]
+        order_index = [index for index, val in enumerate(d) if val.split(" ")[-1] in {buy_order, buy_order+"\n"}]
         if len(order_index) == 1:
             order_index = order_index[0]
             order = d[order_index].split(" ")
         else:
-            print("that's not a valid index!")
+            print("that's not a valid id!")
             exit()
         order_info = {}
         for i, v in enumerate(order[::2]):
-            print(v, order[i*2+1])
-            order_info[v] = order[(i*2)+1]
-        print(order_info)
+            order_info[v] = order[i*2+1]
         for i, v in enumerate(d):
             if i != order_index:
                 f.write(v)
         f.truncate()
     send(int(order_info["amount:"][:-1]), order_info["seller:"][:-1], username)
+    with open("buy_sell_log.txt", "r") as f:
+        debts_raw = f.readlines()
+        debts = []
+        for i in debts_raw:
+            splitted = i.split(" ")
+            debts.append([splitted[0], splitted[2], int(splitted[3])])
+        for i in debts:
+            if order_info["seller:"][:-1] == i[1] and username == i[0]:
+                debt_val = i
+                debt_index = debts.index(i)
+                break
+            elif order_info["seller:"][:-1] == i[0] and username == i[1]:
+                debt_val = i
+                debt_val[2] *= -1
+                debt_index = debts.index(i)
+                break
+        try:
+            debt_val
+            debt_index
+        except:
+            debt_val = [username, order_info["seller:"][:-1], 0]
+            debt_index = None
+    with open("buy_sell_log.txt", "w") as f:
+        for i, v in enumerate(debts_raw):
+            if i != debt_index:
+                f.write(v)
+            else:
+                debt_amt = debt_val[2] + int(order_info["amount:"][:-1])
+                print(debt_amt)
+                print(debt_val[2], int(order_info["amount:"][:-1]))
+                if debt_amt == 0:
+                    pass
+                else:
+                    f.write(f"{username} owes {order_info['seller:'][:-1]} {debt_amt} mencoin")
+        if debt_index == None:
+            debt_amt = int(order_info["amount:"][:-1])
+            f.write(f"{username} owes {debt_val[1]} {debt_amt} mencoin")
+
     record(f"order with id {buy_order} was bought by {username}")
     print("transaction verified")
     exit()
@@ -250,13 +305,12 @@ elif mine_trade_buy_sell == 'buy' :
 elif mine_trade_buy_sell == 'sell' :
     print("\nin progress")
     
-    
     file1 = open("market.txt", "a")
 
     # read file content
     amt = input("how many mencoin do you want to sell?>>")
     order_id = token_hex(nbytes=2)
-    file1.write(f"amount: {amt}, seller: {username}, ID: {order_id}")
+    file1.write(f"amount: {amt}, seller: {username}, ID: {order_id}\n")
     # close file
     file1.close()
     record(f"{username} put up a sell offer for {amt} mencoin with an id of {order_id}")
@@ -325,11 +379,7 @@ class MENCOIN:
     #  return "{}{}{}".format(self.previous_chain.hexdigest(),
     #               self.block_data, t1, t2)
 
-
-times_ran = 0
-
-found = False
-
+time_started_mining = time.time()
 for i in range(int(q)):
     start_time = time.time()
 
@@ -371,7 +421,7 @@ for i in range(int(q)):
         # checking condition for string found or not
         if not initial_block.block_hash in readfile:
             # play sound
-            print('\a' ** 500)
+            print('\a' * 500)
             print("-----------------")
             print("MENCOIN found")
             print("you now have " + str(mencoin_total) + " mencoin")
@@ -421,7 +471,7 @@ for i in range(int(q)):
         t2 = randrange(0, 16**64)
     _ = os.system('clear')
     print("account name: " + username )
-    print("hashes checked:" + str(i+1))
+    print("hashes checked: " + str(i+1))
     print("mencoin found in this run: " + str(mencoin_from_session))
     print("your MENcoin: " + str(mencoin_total))
     print()
@@ -430,7 +480,9 @@ for i in range(int(q)):
     #real fps counter
 
     print("the hash is: " + initial_block.block_hash)
+    print("the nonce value is: " + str(t1))
     print("hashes checked per second is: " + str(1.0/(time.time() - start_time)))
+    print("the time since you started mining is: " + str(time.time() - start_time))
     print("--------------")
           
 print("\n" * 3)
@@ -439,10 +491,10 @@ print("----------------------\n")
 print("MENCOIN REPORT:")
 print("---------------")
 print("scanned: " + str(q) + " hashes for mencoin")
-print("found: " + str(  mencoin_total) +   " mencoin this run  " )
+print("found: " + str(mencoin_total) +   " mencoin this run  " )
 print("the block chain is now: " + str(block_chain))
 print("\nblockchain info")
-print("\nnonce: \t\t" + str(t1) + str(t1))
+print("\nnonce: \t\t" + str(t1))
 record(f"{username} stopped mining. They now have {mencoin_total} mencoin.")
 
 #fixed bug 5:36pm 12/10/21

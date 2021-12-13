@@ -1,11 +1,19 @@
 {
   "files": {
+    "buy_sell_log.txt": [
+      {
+        "id": "19d8de23-71f1-4969-b597-346aadc41cdc",
+        "line": 1,
+        "version": 13,
+        "index": 0
+      }
+    ],
     "wallets/hi.txt": [
       {
         "id": "7ea0045c-03d5-4c5c-8a37-7585ec79910c",
-        "line": 4,
-        "version": 25,
-        "index": 67
+        "line": 1,
+        "version": 72,
+        "index": 0
       }
     ]
   }
