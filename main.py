@@ -1,4 +1,5 @@
-#plzzzzzzzzzzzzzzzzz DO NOT MESS WITH ANY OF THIS CODE UNLESS YOU KNOW WHAT YOU ARE DOING AND HAVE TALKED TO OM
+#plzzzzzzzzzzzzzzzzz DO NOT MESS WITH ANY OF THIS CODE UNLESS YOU KNOW WHAT YOU ARE DOING AND HAVE TALKED TO OM  om dnd
+#hey om can you look at this article: https://docs.replit.com/hosting/authenticating-users-repl-auth
 #ALSO NO SPAMMING
 #WHAT he said
 #import multiprocessing
@@ -9,6 +10,7 @@ import time
 import getpass
 #import json
 from random import randrange
+from replit import db
 import hashlib
 #import Crypto
 #import cryptography
@@ -16,6 +18,7 @@ import hashlib
 import os
 #import os.path
 from PIL import Image
+#from flask import Flask, render_template, request
 ###importing colorama###
 
 ###connector socket###
@@ -39,7 +42,19 @@ t1 = ""
 t2 = ""
 
 #open file
+"""
 
+f = open("passwords.txt", "r")
+passwords = f.readlines()
+f.close()
+db["passwords"] = passwords
+"""
+"""
+db["keys"] = {}
+
+for i in db["passwords"]:
+    db["keys"][i] = i
+"""
 # okay, so what you're going to want to do is add RSA encryption. passwords and shit? useless. you want a public key and private key, named for reasons that are obvious. don't share ur private key, but you recieve coins from your public key. your public key IS your username, and also can be used to verify sending transactions. signing and verifying is functions of the message and public and private keys.
 
 #tldr research RSA encryption
@@ -64,6 +79,7 @@ block_chain = []
 # @2021 ethan lee
 # @2021 Matthew S.
 # @2021 jiyoon chang
+# @2021 Jacob Bolling
 #################
 ####list to string###
 
@@ -71,7 +87,7 @@ block_chain = []
 
 ###webserver for keys###
 
-#it will show global transactions, when mencoin is added, subtracted or bought. Yeee
+#it will show global transactions, when pineapplecoin is added, subtracted or bought. Yeee
 ############################
 
 #dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -96,49 +112,49 @@ def get_men_coin_in_file():
         text = f.readlines()
 
     # using list comp
-    num_mencoin = 0
-    checked_mencoin = []
+    num_pineapplecoin = 0
+    checked_pineapplecoin = []
     for i in text:
         if len(i) == 65 and i.startswith("0000"):
-            if i in checked_mencoin:
-                print("how do u have 2 mencoin with the same hash lol")
+            if i in checked_pineapplecoin:
+                print("how do u have 2 pineapplecoin with the same hash lol")
                 print("fixing your file...")
                 with open("wallets/" + username + ".txt", 'w') as f:
                     text = list(set(text))
                     for i in text:
                         f.write(i)
                 exit()
-            num_mencoin += 1
-        checked_mencoin.append(i)
-    return num_mencoin
+            num_pineapplecoin += 1
+        checked_pineapplecoin.append(i)
+    return num_pineapplecoin
 
 
-def send(num_mencoin, from_who, to_who):
-    print("sending mencoin...")
+def send(num_pineapplecoin, from_who, to_who):
+    print("sending pineapplecoin...")
     file2 = open("wallets/" + to_who + ".txt", "a")
     with open("wallets/" + from_who + ".txt", "r+") as f:
         d = f.readlines()
         f.seek(0)
-        mencoin_indexes = [
+        pineapplecoin_indexes = [
             index for index, val in enumerate(d)
             if len(val) == 65 and val.startswith("0000")
         ]
-        if len(mencoin_indexes) < num_mencoin:
+        if len(pineapplecoin_indexes) < num_pineapplecoin:
             if from_who == username:
-                print("you don't have enough mencoin!")
+                print("you don't have enough pineapplecoin!")
             else:
-                print(f"{from_who} doesn't have enough mencoin!")
+                print(f"{from_who} doesn't have enough pineapplecoin!")
             exit()
         else:
-            last_mencoin_index = mencoin_indexes[-num_mencoin]
-        for i in d[:last_mencoin_index]:
+            last_pineapplecoin_index = pineapplecoin_indexes[-num_pineapplecoin]
+        for i in d[:last_pineapplecoin_index]:
             f.write(i)
-        print(d[last_mencoin_index:])
+        print(d[last_pineapplecoin_index:])
         f.truncate()
     #start placeholder
-    print(list(range(last_mencoin_index, len(d))))
+    print(list(range(last_pineapplecoin_index, len(d))))
     #end placeholder
-    file2.write("\n".join(d[last_mencoin_index:]))
+    file2.write("\n".join(d[last_pineapplecoin_index:]))
     file2.close()
     with open("buy_sell_log.txt", "r") as f:
         debts_raw = f.readlines()
@@ -167,15 +183,15 @@ def send(num_mencoin, from_who, to_who):
             if i != debt_index:
                 f.write(v)
             else:
-                debt_amt = debt_val[2] + num_mencoin
+                debt_amt = debt_val[2] + num_pineapplecoin
                 print(debt_amt)
-                print(debt_val[2], num_mencoin)
+                print(debt_val[2], num_pineapplecoin)
                 if debt_amt == 0:
                     pass
                 else:
-                    f.write(f"{username} owes {from_who} {debt_amt} mencoin")
+                    f.write(f"{username} owes {from_who} {debt_amt} pineapplecoin")
         if debt_index == None:
-            f.write(f"{username} owes {from_who} {num_mencoin} mencoin")
+            f.write(f"{username} owes {from_who} {num_pineapplecoin} pineapplecoin")
 
 
 def record(data):
@@ -184,9 +200,6 @@ def record(data):
         f.write(data + f" ({current_time})\n")
 
 
-###key will be generated every transaction created###
-image = Image.open('mencoin_logo.png')
-image.show()
 
 
 def keygenerator(byte_amount):
@@ -207,14 +220,14 @@ if account_option == "login":
     #print(contents)
 
     if username + "\n" in contents:
-        print("welcome back sir")
+        print("welcome back, " + username)
         for i in glob.glob("wallets/" + username + ".txt"):
             if i == "wallets/" + username + ".txt":
-                mencoin_from_session = 0
-                mencoin_total = get_men_coin_in_file()
+                pineapplecoin_from_session = 0
+                pineapplecoin_total = get_men_coin_in_file()
                 record(f"{username} has logged into their account.")
                 print("\nwallet found!")
-                print("your wallet has " + str(mencoin_total) + " mencoin!\n")
+                print("your wallet has " + str(pineapplecoin_total) + " pineapplecoin!\n")
             else:
                 print("\nwallet not found")
                 exit()
@@ -229,33 +242,23 @@ elif account_option == "account":
     print("---------------------------\n")
     accounter = input("password>> ")
 
-    string1 = accounter
-
-    # opening a text file
-    file1 = open("passwords.txt", "r+")
-
-    # read file content
-    readfile = file1.read()
-
-    # close file
-    file1.close()
 
     # checking condition for string found or not
-    if string1 in readfile:
-        print('password taken')
-        exit()
-    else:
+    #if accounter in db["passwords"]:
+        #print('password taken')
+        #exit()
+    if True:#else:
         print("\npassword updated\n")
         # closing a file
-        f = open("passwords.txt", "a+")
-        f.write(accounter + "\n")
+        db["passwords"].append(accounter)
+        f = open("passwords.txt", "a")
+        f.write(accounter)
         f.close()
-        mywallet = open("wallets/" + accounter + ".txt", "a+")
-        mencoin_from_session = 0
-        mencoin_total = 0
+        mywallet = open("wallets/" + accounter + ".txt", "x")
+        mywallet.close()
+        pineapplecoin_from_session = 0
+        pineapplecoin_total = 0
         username = accounter
-
-    file1.close()
 else:
     print("not a valid answer")
     exit()
@@ -289,14 +292,18 @@ elif mine_trade_buy_sell == 'trade':
     if public_key_send in readfile:
 
         # placeholder until om makes it better
-        num_send = int(input("how many mencoin would you like to send?>>"))
+        try:
+            num_send = int(input("how many pineapplecoin would you like to send?>>"))
+        except:
+            print("your answer wasn't a number.")
+            exit()
         send(num_send, username, public_key_send)
-        record(f"{username} sent 1 mencoin to {public_key_send}")
+        record(f"{username} sent {str(num_send)} pineapplecoin to {public_key_send}")
     else:
         print("that account doesn't exist!")
 
     print(" ")
-    print("MENCOIN SENT")
+    print("pineapplecoin SENT")
     print(" ")
     exit()
 
@@ -335,15 +342,19 @@ elif mine_trade_buy_sell == 'sell':
     file1 = open("market.txt", "a")
 
     # read file content
-    amt = input("how many mencoin do you want to sell?>>")
-    order_id = token_hex(nbytes=2)
+    amt = input("how many pineapplecoin do you want to sell?>>")
+    try:
+        amt = int(amt)
+    except:
+        
+    	order_id = token_hex(nbytes=2)
     file1.write(f"amount: {amt}, seller: {username}, ID: {order_id}\n")
     # close file
     file1.close()
     record(
-        f"{username} put up a sell offer for {amt} mencoin with an id of {order_id}"
+        f"{username} put up a sell offer for {amt} pineapplecoin with an id of {order_id}"
     )
-    print("MENcoin sell order put up")
+    print("pineapplecoin sell order put up")
     exit()
 # opening a text file
 
@@ -380,9 +391,9 @@ print("blockchain: " + str(block_chain))
 print("------------------")
 
 if mine_trade_buy_sell == "afk":
-    record(f"{username} went afk with {mencoin_total} mencoin.")
+    record(f"{username} went afk with {pineapplecoin_total} pineapplecoin.")
 elif mine_trade_buy_sell == "mine":
-    record(f"{username} started mining with {mencoin_total} mencoin.")
+    record(f"{username} started mining with {pineapplecoin_total} pineapplecoin.")
 
 #wait noo that doesn't work
 #dang :(
@@ -391,7 +402,7 @@ elif mine_trade_buy_sell == "mine":
 #but it doesn't lol
 
 
-class MENCOIN:
+class pineapplecoin:
     def __init__(self, previous_chain, transaction_list):
         self.previous_chain = previous_chain
         self.transaction_list = transaction_list
@@ -408,7 +419,7 @@ time_started_mining = time.time()
 for i in range(int(q)):
     start_time = time.time()
 
-    initial_block = MENCOIN("Initial String", [str(t1), str(t2)])
+    initial_block = pineapplecoin("Initial String", [str(t1), str(t2)])
 
     if initial_block.block_hash.startswith("0000"):
         # opening a text file
@@ -421,12 +432,12 @@ for i in range(int(q)):
             # play sound
             print('\a' * 500)
             print("-----------------")
-            print("MENCOIN found")
-            print("you now have " + str(mencoin_total) + " mencoin")
+            print("pineapplecoin found")
+            print("you now have " + str(pineapplecoin_total) + " pineapplecoin")
             print("very nice kepp grinding tho")
             print("-----------------")
-            mencoin_from_session += 1
-            mencoin_total += 1
+            pineapplecoin_from_session += 1
+            pineapplecoin_total += 1
             p = open("wallets/" + username + ".txt", 'a')
             e = open("where_to_start.txt", "w")
             lines = [str(t1) + "\n", str(t2)]
@@ -438,19 +449,19 @@ for i in range(int(q)):
             f.write(str(t2) + "\n")
             ##################################
             #write to global transaction file#
-            record(username + " mined 1 mencoin!")
+            record(username + " mined 1 pineapplecoin!")
             #################################
             f.close()
-            print("\nMENCOIN REPORT:")
+            print("\npineapplecoin REPORT:")
             print("---------------")
-            print("scanned: " + str(q) + " hashes for mencoin")
-            print("found: " + str(mencoin_from_session) + " mencoin this run")
+            print("scanned: " + str(q) + " hashes for pineapplecoin")
+            print("found: " + str(pineapplecoin_from_session) + " pineapplecoin this run")
             print("the block chain is now: " + str(block_chain))
             print("\nblockchain info\n")
             print("Hash: \t\t" + initial_block.block_hash)
             print("nonce: \t\t" + str(t1) + str(t1))
 
-            if mencoin_from_session == vb:
+            if pineapplecoin_from_session == vb:
                 break
         # closing a file
         file1.close()
@@ -459,7 +470,7 @@ for i in range(int(q)):
 
         #if found == False:
         #print("_________________________________")
-        #print("NO MENCOIN FOUND, KEEP TRYING")
+        #print("NO pineapplecoin FOUND, KEEP TRYING")
         #print("_________________________________")
     if random_nonce_bool == False:
         t1 += 1
@@ -468,13 +479,13 @@ for i in range(int(q)):
         t1 = randrange(0, 16**64)
         t2 = randrange(0, 16**64)
     _ = os.system('clear')
-    print("account name: " + username)
+    print("public key: " + username)
     print("hashes checked: " + str(i + 1))
-    print("mencoin found in this run: " + str(mencoin_from_session))
-    print("your MENcoin: " + str(mencoin_total))
+    print("pineapplecoin found in this run: " + str(pineapplecoin_from_session))
+    print("your pineapplecoin: " + str(pineapplecoin_total))
     print()
     #time.sleep(1.5)
-    print("------------")
+    print("-"*50)
     #real fps counter
 
     print("the hash is: " + initial_block.block_hash)
@@ -483,20 +494,19 @@ for i in range(int(q)):
                                                  (time.time() - start_time)))
     print("the time since you started mining is: " +
           str(time.time() - time_started_mining))
-    print("--------------")
+    print("-"*50)
 
 print("\n" * 3)
-print("MENCOIN MINING STOPPED")
+print("pineapplecoin MINING STOPPED")
 print("----------------------\n")
-print("MENCOIN REPORT:")
+print("pineapplecoin REPORT:")
 print("---------------")
-print("scanned: " + str(q) + " hashes for mencoin")
-print("found: " + str(mencoin_total) + " mencoin this run  ")
+print("scanned: " + str(q) + " hashes for pineapplecoin")
+print("found: " + str(pineapplecoin_total) + " pineapplecoin this run  ")
 print("the block chain is now: " + str(block_chain))
 print("\nblockchain info")
 print("\nnonce: \t\t" + str(t1))
-record(f"{username} stopped mining. They now have {mencoin_total} mencoin.")
+record(f"{username} stopped mining. They now have {pineapplecoin_total} pineapplecoin.")
 
 #fixed bug 5:36pm 12/10/21
 #fixed bug 5:36pm 12/10/21
-9999999999999999999999999999

@@ -1,2 +1,1 @@
-amount: exit, seller: 142611, ID: 3f59
-amount: 5, seller: THICCheese, ID: 5ab4
+amount: 600, seller: Jmagicc21, ID: 3e4d
