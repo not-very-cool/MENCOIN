@@ -18,6 +18,14 @@ yarl = ">=1.0,<2.0"
 speedups = ["aiodns", "brotlipy", "cchardet"]
 
 [[package]]
+name = "antiorm"
+version = "1.2.1"
+description = "A Pythonic Helper for DBAPI-2.0 SQL Access"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "async-timeout"
 version = "3.0.1"
 description = "Timeout context manager for asyncio programs"
@@ -133,6 +141,17 @@ postgresql_aiopg = ["aiopg"]
 sqlite = ["aiosqlite"]
 
 [[package]]
+name = "db"
+version = "0.1.1"
+description = "Databases for Humans"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+antiorm = "*"
+
+[[package]]
 name = "discord"
 version = "1.7.3"
 description = "A mirror package for discord.py. Please install that instead."
@@ -237,6 +256,14 @@ python-versions = ">=3.6"
 name = "mysql-connector"
 version = "2.2.9"
 description = "MySQL driver written in Python"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "playsound"
+version = "1.3.0"
+description = "Pure Python, cross platform, single function module with no dependencies for playing sounds."
 category = "main"
 optional = false
 python-versions = "*"
@@ -380,7 +407,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "b82fc44f6662ae1551e4677e5b909786f288bd8422aa49923bae8bee50b729eb"
+content-hash = "aa4314b2dbeb875d5336b5b2756ca752ad6e701feb27c054681416608953016f"
 
 [metadata.files]
 aiohttp = [
@@ -421,6 +448,9 @@ aiohttp = [
     {file = "aiohttp-3.7.4.post0-cp39-cp39-win32.whl", hash = "sha256:932bb1ea39a54e9ea27fc9232163059a0b8855256f4052e776357ad9add6f1c9"},
     {file = "aiohttp-3.7.4.post0-cp39-cp39-win_amd64.whl", hash = "sha256:02f46fc0e3c5ac58b80d4d56eb0a7c7d97fcef69ace9326289fb9f1955e65cfe"},
     {file = "aiohttp-3.7.4.post0.tar.gz", hash = "sha256:493d3299ebe5f5a7c66b9819eacdcfbbaaf1a8e84911ddffcdc48888497afecf"},
+]
+antiorm = [
+    {file = "antiorm-1.2.1.tar.gz", hash = "sha256:96eb1841ce5163db4cf1dc13f4499ec2d7cffc190cf724b78ffdd3e6b7c4ff93"},
 ]
 async-timeout = [
     {file = "async-timeout-3.0.1.tar.gz", hash = "sha256:0c3c816a028d47f659d6ff5c745cb2acf1f966da1fe5c19c77a70282b25f4c5f"},
@@ -528,6 +558,9 @@ cryptography = [
 databases = [
     {file = "databases-0.5.3-py3-none-any.whl", hash = "sha256:23862bd96241d8fcbf97eea82995ccb3baa8415c3cb106832b7509f296322f86"},
     {file = "databases-0.5.3.tar.gz", hash = "sha256:b69d74ee0b47fa30bb6e76db0c58da998e973393259d29215d8fb29352162bd6"},
+]
+db = [
+    {file = "db-0.1.1.tar.gz", hash = "sha256:980e772f15c1161d3b287ffec4f144e40961b0b3e6d5102809577870bf6c5808"},
 ]
 discord = [
     {file = "discord-1.7.3-py3-none-any.whl", hash = "sha256:248d728356e149c818a81b94659047a19305ea1623d4810bbb342f6b7df55f36"},
@@ -752,6 +785,9 @@ multidict = [
 ]
 mysql-connector = [
     {file = "mysql-connector-2.2.9.tar.gz", hash = "sha256:1733e6ce52a049243de3264f1fbc22a852cb35458c4ad739ba88189285efdf32"},
+]
+playsound = [
+    {file = "playsound-1.3.0.tar.gz", hash = "sha256:cc6ed11d773034b0ef624e6bb4bf50f4b76b8414a59ce6d38afb89b423297ced"},
 ]
 pycparser = [
     {file = "pycparser-2.21-py2.py3-none-any.whl", hash = "sha256:8ee45429555515e1f6b185e78100aea234072576aa43ab53aefcae078162fca9"},

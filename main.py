@@ -1,8 +1,5 @@
-#plzzzzzzzzzzzzzzzzz DO NOT MESS WITH ANY OF THIS CODE UNLESS YOU KNOW WHAT YOU ARE DOING AND HAVE TALKED TO OM  om dnd
-#hey om can you look at this article: https://docs.replit.com/hosting/authenticating-users-repl-auth
-#ALSO NO SPAMMING
-#WHAT he said
-#import multiprocessing
+
+from replit import db
 import glob
 from secrets import token_hex
 from datetime import datetime
@@ -10,21 +7,32 @@ import time
 import getpass
 #import json
 from random import randrange
-from replit import db
-import hashlib
+#import hashlib
 #import Crypto
 #import cryptography
 #import databases
 import os
+#from playsound import playsound
 #import os.path
-from PIL import Image
-#from flask import Flask, render_template, request
-###importing colorama###
-
+#importing colorama###
 ###connector socket###
 port = 443
 mode = "peer-to-peer"
 server_status = "down"
+
+
+# settings.py
+
+#secret_token = os.getenv("q")
+
+#if secret_token:
+#  print("The secret TOKEN is:", secret_token)
+#else:
+#  print("Looks like you're not the owner")
+
+
+
+
 
 global username
 #########PRIVATE KEY GENERATOR##############
@@ -41,7 +49,8 @@ Put.close()
 t1 = ""
 t2 = ""
 
-#open file
+#print(db)
+
 """
 
 f = open("passwords.txt", "r")
@@ -74,13 +83,14 @@ block_chain = []
 #################
 # @2021 Om Silwal
 # @2021 PDN
-# @2021 garrison BOGUS
+# @2021 garrison Better than you
 # @2021 javi d funk
 # @2021 ethan lee
 # @2021 Matthew S.
 # @2021 jiyoon chang
 # @2021 Jacob Bolling
 #################
+# is this the list of the people who are ded
 ####list to string###
 
 ###list to string###
@@ -95,9 +105,8 @@ block_chain = []
 #print(str3.decode("UTF-32"))
 
 
-def website():
-    print("pass")
-    print("---")
+
+
 
 
 #you can help in any way
@@ -163,11 +172,11 @@ def send(num_pineapplecoin, from_who, to_who):
             splitted = i.split(" ")
             debts.append([splitted[0], splitted[2], int(splitted[3])])
         for i in debts:
-            if from_who == i[1] and username == i[0]:
+            if from_who == i[1] and to_who == i[0]:
                 debt_val = i
                 debt_index = debts.index(i)
                 break
-            elif from_who == i[0] and username == i[1]:
+            elif from_who == i[0] and to_who == i[1]:
                 debt_val = i
                 debt_val[2] *= -1
                 debt_index = debts.index(i)
@@ -189,9 +198,9 @@ def send(num_pineapplecoin, from_who, to_who):
                 if debt_amt == 0:
                     pass
                 else:
-                    f.write(f"{username} owes {from_who} {debt_amt} pineapplecoin")
+                    f.write(f"{to_who} owes {from_who} {debt_amt} pineapplecoin\n")
         if debt_index == None:
-            f.write(f"{username} owes {from_who} {num_pineapplecoin} pineapplecoin")
+            f.write(f"{username} owes {from_who} {num_pineapplecoin} pineapplecoin\n")
 
 
 def record(data):
@@ -202,8 +211,8 @@ def record(data):
 
 
 
-def keygenerator(byte_amount):
-    print(token_hex(nbytes=byte_amount))
+#def keygenerator(byte_amount):
+    #print(token_hex(nbytes=byte_amount))
 
 
 account_option = input("Do you want to login or make an account>> ").lower()
@@ -211,9 +220,25 @@ account_option = input("Do you want to login or make an account>> ").lower()
 if account_option == "login":
 
     username = getpass.getpass(prompt='private key (invisible): ')
+    
+    if username == 'coin':
+      print("wtf stop stealing our PINEAPPLECOIN")
+      exit()
+    
+    elif username == 'hi':
+      private = getpass.getpass(prompt='private key (invisible): ')
+      if private == 'wasd':
+      
+      
 
-    with open('passwords.txt') as f:
-      contents = f.read()
+
+
+    
+    
+        
+      
+        with open('passwords.txt') as f:
+          contents = f.read()
       
 
         
@@ -348,7 +373,7 @@ elif mine_trade_buy_sell == 'sell':
     except:
         
     	order_id = token_hex(nbytes=2)
-    file1.write(f"amount: {amt}, seller: {username}, ID: {order_id}\n")
+    file1.write(f"amount: {amt}, seller: {username}, ID: {order_id}")
     # close file
     file1.close()
     record(
@@ -430,7 +455,7 @@ for i in range(int(q)):
         # checking condition for string found or not
         if not initial_block.block_hash in readfile:
             # play sound
-            print('\a' * 500)
+            print('\a' * 500000000000000000000000000)
             print("-----------------")
             print("pineapplecoin found")
             print("you now have " + str(pineapplecoin_total) + " pineapplecoin")
@@ -508,5 +533,13 @@ print("\nblockchain info")
 print("\nnonce: \t\t" + str(t1))
 record(f"{username} stopped mining. They now have {pineapplecoin_total} pineapplecoin.")
 
+
+
+
+"""
+def __init___(new_func) {
+  print("PineappleCoin wallet app")
+}
+"""
 #fixed bug 5:36pm 12/10/21
 #fixed bug 5:36pm 12/10/21
